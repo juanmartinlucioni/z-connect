@@ -1,29 +1,65 @@
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className='App'>
+      <header className='App-header'>
         <h1>Z-connect</h1>
       </header>
-      <div className="wrapper">
-          <div className="card">
-            <ul>
-              <li>name</li>
-              <li>email</li>
-              <li>number</li>
-              <img/>
-            </ul>
+      <main className='wrapper'>
+        <div className='cards-wrapper'>
+          <div className='card'>
+            <h3>User 1</h3>
+            <img
+              className='user-image'
+              src='./images/sampleimage.jpg'
+              alt='Sample User Image'
+            />
+            <p>Email: harlodpain@gmail.com</p>
+            <p>Birthday: 02/02/1997 (Age 24)</p>
           </div>
-      </div>
-        <footer>
-           <ul>
-              <li>Juan</li>
-              <li>Mati</li>
-              <li>Jim</li>
-            </ul>
-        </footer>
+
+          <div className='card'>
+            <h3>User 2</h3>
+            <img
+              className='user-image'
+              src='./images/sampleimage.jpg'
+              alt='Sample User Image'
+            />
+            <p>Email: harlodpain@gmail.com</p>
+            <p>Birthday: 02/02/1997 (Age 24)</p>
+          </div>
+
+          <div className='card'>
+            <h3>User 3</h3>
+            <img
+              className='user-image'
+              src='./images/sampleimage.jpg'
+              alt='Sample User Image'
+            />
+            <p>Email: harlodpain@gmail.com</p>
+            <p>Birthday: 02/02/1997 (Age 24)</p>
+          </div>
+
+          <div className='card'>
+            <h3>User 4</h3>
+            <img
+              className='user-image'
+              src='./images/sampleimage.jpg'
+              alt='Sample User Image'
+            />
+            <p>Email: harlodpain@gmail.com</p>
+            <p>Birthday: 02/02/1997 (Age 24)</p>
+          </div>
+        </div>
+      </main>
+      <footer className='App-footer'>
+        <ul>
+          <li>Juan Martin Lucioni</li>
+          <li>Matías Ayerza</li>
+          <li>Jim Rattagan</li>
+        </ul>
+      </footer>
     </div>
   );
 }
