@@ -6,7 +6,7 @@ class Main extends Component {
     super();
     this.state = {
       originalUserList: [],
-      userList: []
+      userList: [],
     }
   }
 
@@ -19,7 +19,11 @@ class Main extends Component {
     });
   };
 
-  moreCards = () => {
+  moreCards = (event) => {
+    event.preventDefault();
+    this.setState({
+      userList: this.state.originalUserList
+    })
     const baseUrl = "https://randomuser.me/api/?results=";
     let addNumber = document.getElementById("numero").value 
     fetch(baseUrl.concat(addNumber))
@@ -27,16 +31,75 @@ class Main extends Component {
       .then((resultado) => {
         var userListParse = this.state.userList;
         for (let i = 0; i < resultado.results.length; i++) {
-        const user = resultado.results[i];
-        userListParse.push(user);
+          const user = resultado.results[i];
+          userListParse.push(user);
         }
         console.log(userListParse);
         this.setState({
-          userList: userListParse
+          userList: userListParse,
+          originalUserList: userListParse
         });
       })
       .catch((e) => console.log(e));
   };
+
+  filterCards = (event) => {
+    event.preventDefault();
+    let filterName = document.getElementById("filter-name").value;
+    let filterLast = document.getElementById("filter-last").value;
+    let filterAge = document.getElementById("filter-age").value;
+
+    if (filterName !== "") {
+      let userListName = this.state.userList.filter((user) => user.name.first.toLowerCase().includes(filterName.toLowerCase()));
+      this.setState({
+        userList: userListName,
+      });
+      if (filterLast !== "") {
+        let userListLast = userListName.filter((user) => user.name.last.toLowerCase().includes(filterLast.toLowerCase()));
+        this.setState({
+          userList: userListLast
+        })
+        if (filterAge !== "") {
+          let userListAge = userListLast.filter((user) => user.dob.age == filterAge);
+          this.setState({
+            userList: userListAge,
+          });
+        }
+      } else {
+        if (filterAge !== "") {
+          let userListAge = userListName.filter((user) => user.dob.age == filterAge);
+          this.setState({
+            userList: userListAge,
+          });
+        }
+      }
+    } else  if (filterLast !== ""){
+      let userListLast = this.state.userList.filter((user) => user.name.last.toLowerCase().includes(filterLast.toLowerCase()));
+        this.setState({
+          userList: userListLast
+        })
+        if (filterAge !== "") {
+          let userListAge = userListLast.filter((user) => user.dob.age == filterAge);
+          this.setState({
+            userList: userListAge,
+          });
+        }
+      } else {
+        if (filterAge !== "") {
+          let userListAge = this.state.userList.filter((user) => user.dob.age == filterAge);
+          this.setState({
+            userList: userListAge,
+          });
+    }
+  }
+}
+
+  resetCards = (event) => {
+    event.preventDefault();
+    this.setState({
+      userList: this.state.originalUserList
+    })
+  }
 
   componentDidMount(){
     fetch("https://randomuser.me/api/?results=20")
@@ -53,11 +116,28 @@ class Main extends Component {
   render(){
   return (
     <main className='wrapper'>
-      <div id='filter'>
-        <div className='add-cards'>
+      <div id='filter' style={{ height: this.state.filterHeight }}>
+        <div className='add-wrapper'>
           <h3>Add More Cards</h3>
-          <input type='number' name='numero' id='numero' min='1'></input>
-          <button onClick={this.moreCards}>Add</button>
+          <form>
+            <input type='number' name='numero' id='numero' min='1' />
+            <button onClick={this.moreCards} className='blue-button'>Add</button>
+          </form>
+        </div>
+        <div className='filter-wrapper'>
+          <h3>Filter</h3>
+          <form>
+            <label for='filter-name'>First Name</label>
+            <input type='text' name='filter-name' id='filter-name' />
+            <label for='filter-name'>Last Name</label>
+            <input type='text' name='filter-last' id='filter-last' />
+            <label for='filter-age'>Age</label>
+            <input type='number' name='filter-age' id='filter-age' min='1' />
+            <div>
+              <button onClick={this.filterCards} className='blue-button' type='submit'>Filter</button>
+              <button onClick={this.resetCards} className='blue-button'>Reset Cards</button>
+            </div>
+          </form>
         </div>
       </div>
       <div className='cards-wrapper'>

@@ -33,9 +33,15 @@ li {
   color: white;
   position: sticky;
   top: 0;
+  z-index: 1000;
+  height: 100px;
 }
 
-header button {
+#logo {
+  height: 70px;
+}
+
+.blue-button {
   height: 25px;
   width: 100px;
   background-color: rgb(39, 111, 219);
@@ -45,27 +51,58 @@ header button {
   transition: 0.2s all ease-in-out;
 }
 
-header button:hover {
+.blue-button:hover {
   background-color: rgb(29, 78, 151);
   cursor: pointer;
 }
 
 div#filter {
   position: fixed;
-  right: -50%;
+  right: -350px;
   height: 100%;
-  width: 25%;
+  width: 0%;
   padding: 1em;
   background-color: black;
-  transition: 0.5s all ease-in-out;
+  transition: 0.2s all ease-in-out;
+  /* top: -50%;
+  width: 100%;
+  height: auto; */
 }
 
 div#filter.show {
   right: 0;
+  width: 25%;
+  /* top: 85px; */
 }
 
-div.add-cards input {
-  margin-right: 10px;
+div.add-wrapper {
+  padding-bottom: 25px;
+  border-bottom: solid white 1px;
+}
+
+div.add-wrapper input {
+  margin: 0 10px;
+}
+
+div.filter-wrapper form {
+  padding-bottom: 25px;
+  margin-bottom: 25px;
+  border-bottom: solid white 1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+div.filter-wrapper input {
+  width: 75%;
+  margin: 2.5px 10px;
+}
+
+div.filter-wrapper div {
+  margin-top: 5px;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 main.wrapper {
@@ -77,13 +114,13 @@ main.wrapper {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  height: 100%;
 }
 
 .card {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%;
   width: 30%;
   margin-top: 2.5vh;
   margin-bottom: 2.5vh;
@@ -125,6 +162,11 @@ main.wrapper {
   cursor: pointer;
 }
 
+.card .view-more-wrapper {
+  overflow: hidden;
+  transition: 0.2s all ease-in-out;
+}
+
 .user-image {
   height: 100px;
   width: 100px;
@@ -142,4 +184,8 @@ main.wrapper {
   justify-content: space-evenly;
   height: 40px;
   align-items: center;
+}
+
+.App-footer ul li {
+  width: 30%;
 }
