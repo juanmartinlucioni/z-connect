@@ -4,13 +4,22 @@ class Card extends Component{
   constructor(props){
     super(props)
     this.state ={
-
+      currentDisplay: "none",
+      nextDisplay: "block"
     }
   }
+
+  viewMore() {
+    this.setState({
+      currentDisplay: this.state.nextDisplay,
+      nextDisplay: this.state.currentDisplay
+    })
+  }
+
   render(){ 
   return (
       <div id={this.props.id} className='card'>
-        <button onClick={()=>{this.props.deleteCard(this.props.id)}}>x</button>
+        <button id='delete-card-button' onClick={()=>{this.props.deleteCard(this.props.id)}}>X</button>
         <h3>{this.props.userInfo.name.first + " " +this.props.userInfo.name.last}</h3>
         <img
           className='user-image'
@@ -19,6 +28,14 @@ class Card extends Component{
         />
         <p>Email: {this.props.userInfo.email}</p>
         <p>Birthday: {this.props.userInfo.dob.date.substring(0,10)} (Age: {this.props.userInfo.dob.age})</p>
+        <button class='view-more-button' id={'view-more-button-' + this.props.id} onClick={()=>{this.viewMore()}}>View More</button>
+        <div className='view-more-wrapper' id='view-more-wrapper' style={{display: this.state.currentDisplay}}>
+          <p>Phone: {this.props.userInfo.phone}</p>
+          <p>Address: {this.props.userInfo.location.street.name} {this.props.userInfo.location.street.number}</p>
+          <p>City: {this.props.userInfo.location.city}, {this.props.userInfo.location.state} ({this.props.userInfo.location.postcode})</p>
+          <p>Country: {this.props.userInfo.location.country}</p>
+          <p>Register Date: {this.props.userInfo.registered.date.substring(0,10)}</p>
+        </div>
       </div>
     );
 }

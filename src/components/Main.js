@@ -6,9 +6,10 @@ class Main extends Component {
     super();
     this.state = {
       originalUserList: [],
-      userList: [],
+      userList: []
     }
   }
+
   deleteCard = (idToDelete) => {
     let userList = this.state.userList.filter(
       (user) => user.login.uuid !== idToDelete
@@ -17,6 +18,7 @@ class Main extends Component {
       userList: userList,
     });
   };
+
   moreCards = () => {
     const baseUrl = "https://randomuser.me/api/?results=";
     let addNumber = document.getElementById("numero").value 
@@ -30,12 +32,12 @@ class Main extends Component {
         }
         console.log(userListParse);
         this.setState({
-          // originalUserList: resultado.results, // Para restaurar esta pagina, si quiero volver al primer state no hay que poner esta linea
           userList: userListParse
         });
       })
       .catch((e) => console.log(e));
   };
+
   componentDidMount(){
     fetch("https://randomuser.me/api/?results=20")
       .then((r) => r.json())
@@ -44,21 +46,23 @@ class Main extends Component {
           originalUserList: resultado.results,
           userList: resultado.results,
         });
-        console.log(this.state.userList);
       })
       .catch((e) => console.log(e));
-  }
+  };
+
   render(){
   return (
-   <main className='wrapper'>
-     <div className='buttons'>
-      <label for="numero"></label>
-      <input type="number" name="numero" id="numero" min="1"></input>
-      <button onClick={this.moreCards}>Add More Cards</button>
-     </div>
+    <main className='wrapper'>
+      <div id='filter'>
+        <div className='add-cards'>
+          <h3>Add More Cards</h3>
+          <input type='number' name='numero' id='numero' min='1'></input>
+          <button onClick={this.moreCards}>Add</button>
+        </div>
+      </div>
       <div className='cards-wrapper'>
-      <React.Fragment>
-      {this.state.userList.map((user) => {
+        <React.Fragment>
+          {this.state.userList.map((user) => {
             return (
               <React.Fragment key={user.login.uuid}>
                 <Card
@@ -69,7 +73,7 @@ class Main extends Component {
               </React.Fragment>
             );
           })}
-      </React.Fragment>
+        </React.Fragment>
       </div>
     </main>
   );
