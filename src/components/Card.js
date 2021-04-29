@@ -22,7 +22,7 @@ class Card extends Component{
 
   render(){ 
   return (
-      <div id={this.props.id} className='card'>
+      <div id={this.props.id} ref={this.props.provided.innerRef} {...this.props.provided.droppableProps} {...this.props.provided.dragHandleProps}>
         <button id='delete-card-button' onClick={()=>{this.props.deleteCard(this.props.id)}}>X</button>
         <h3>{this.props.userInfo.name.first + " " +this.props.userInfo.name.last}</h3>
         <img

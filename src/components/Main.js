@@ -1,5 +1,6 @@
 import React, {Component} from "react"
 import Card from "./Card";
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 class Main extends Component {
   constructor(){
@@ -11,7 +12,7 @@ class Main extends Component {
       nextDirection: "column",
     }
   }
-
+  
   sortBy = (property, subprop) => {
     function dynamicSort(property, subprop) {
       var sortOrder = 1;
@@ -161,21 +162,34 @@ class Main extends Component {
           </form>
         </div>
       </div>
-      <div className='cards-wrapper' style={{flexDirection:this.state.currentDirection}}>
-        <React.Fragment>
-          {this.state.userList.map((user) => {
-            return (
-              <React.Fragment key={user.login.uuid}>
-                <Card
-                  userInfo={user}
-                  id={user.login.uuid}
-                  deleteCard={this.deleteCard}
-                />
-              </React.Fragment>
-            );
-          })}
-        </React.Fragment>
-      </div>
+      <DragDropContext onDragEnd={handleOnDragEnd}> 
+      <Droppable droppableId="cards-wrapper">
+        {(provided) => (
+          <div className='cards-wrapper' style={{flexDirection:this.state.currentDirection}} {...provided.droppableProps} ref={provided.innerRef}>
+            <React.Fragment>
+              {this.state.userList.map((user,index) => {
+                return (
+                <Draggable key={user.login.uuid} draggableId={user.login.uuid} index={index}>
+                  {(provided) => (
+                  <div className="card" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                    <Card 
+                         userInfo={user}
+                        id={user.login.uuid}
+                        deleteCard={this.deleteCard}
+                        provided={provided}
+                     /> 
+                  </div>
+                
+                  )}
+                </Draggable>
+                );
+              })}
+            </React.Fragment>
+            {provided.placeholder}
+          </div>
+         )}
+      </Droppable>
+      </DragDropContext>
     </main>
   );
   }
