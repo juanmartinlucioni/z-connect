@@ -9,7 +9,55 @@ class Main extends Component {
       userList: [],
     }
   }
+  dynamicSort = function dynamicSort(property) {
+    var sortOrder = 1;
+    if(property[0] === "-") {
+        sortOrder = -1;
+        property = property.substr(1);
+    }
+    return function (a,b) {
+        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+        return result * sortOrder;
+    }
+    
+  }
+  sortByName = () => {
+    function dynamicSort(property) {
+      var sortOrder = 1;
+      if(property[0] === "-") {
+          sortOrder = -1;
+          property = property.substr(1);
+      }
+      return function (a,b) {
+          var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+          return result * sortOrder;
+      }
+    }
+    let userList = this.state.userList.sort(dynamicSort("email"))
+    this.setState({
+      userList:userList,
+    });
+  }
+  sortByNameReverse = () => {
+    function dynamicSort(property) {
+      var sortOrder = 1;
+      if(property[0] === "-") {
+          sortOrder = -1;
+          property = property.substr(1);
+      }
+      return function (a,b) {
+          var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+          return result * sortOrder;
+      }
+    }
+    let userList = this.state.userList.sort(dynamicSort("-email"))
+    this.setState({
+      userList:userList,
+    });
+  }
+  // sortByNameReverse = () =>{
 
+  // }
   deleteCard = (idToDelete) => {
     let userList = this.state.userList.filter(
       (user) => user.login.uuid !== idToDelete
@@ -123,6 +171,11 @@ class Main extends Component {
             <input type='number' name='numero' id='numero' min='1' />
             <button onClick={this.moreCards} className='blue-button'>Add</button>
           </form>
+        </div>
+        <div className='add-wrapper'>
+          <h3>Sort By Name</h3>
+            <button onClick={this.sortByName} className='blue-button'>A-Z</button>
+            <button onClick={this.sortByNameReverse} className='blue-button'>Z-A</button>
         </div>
         <div className='filter-wrapper'>
           <h3>Filter</h3>
