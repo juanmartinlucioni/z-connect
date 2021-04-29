@@ -9,55 +9,25 @@ class Main extends Component {
       userList: [],
     }
   }
-  dynamicSort = function dynamicSort(property) {
-    var sortOrder = 1;
-    if(property[0] === "-") {
-        sortOrder = -1;
-        property = property.substr(1);
-    }
-    return function (a,b) {
-        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-        return result * sortOrder;
-    }
-    
-  }
-  sortByName = () => {
-    function dynamicSort(property) {
+  sortBy = (property, subprop) => {
+    function dynamicSort(property, subprop) {
       var sortOrder = 1;
       if(property[0] === "-") {
           sortOrder = -1;
           property = property.substr(1);
       }
       return function (a,b) {
-          var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+          var result = (a[property][subprop] < b[property][subprop]) ? -1 : (a[property][subprop] > b[property][subprop]) ? 1 : 0;
           return result * sortOrder;
       }
     }
-    let userList = this.state.userList.sort(dynamicSort("email"))
+    let userList = this.state.userList.sort(dynamicSort(property,subprop))
     this.setState({
       userList:userList,
     });
   }
-  sortByNameReverse = () => {
-    function dynamicSort(property) {
-      var sortOrder = 1;
-      if(property[0] === "-") {
-          sortOrder = -1;
-          property = property.substr(1);
-      }
-      return function (a,b) {
-          var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-          return result * sortOrder;
-      }
-    }
-    let userList = this.state.userList.sort(dynamicSort("-email"))
-    this.setState({
-      userList:userList,
-    });
-  }
-  // sortByNameReverse = () =>{
 
-  // }
+  
   deleteCard = (idToDelete) => {
     let userList = this.state.userList.filter(
       (user) => user.login.uuid !== idToDelete
@@ -174,8 +144,13 @@ class Main extends Component {
         </div>
         <div className='add-wrapper'>
           <h3>Sort By Name</h3>
-            <button onClick={this.sortByName} className='blue-button'>A-Z</button>
-            <button onClick={this.sortByNameReverse} className='blue-button'>Z-A</button>
+            <button onClick={()=>this.sortBy("name","first")} className='blue-button'>A-Z</button>
+            <button onClick={()=>this.sortBy("-name","first")} className='blue-button'>Z-A</button>
+        </div>
+        <div className='add-wrapper'>
+          <h3>Sort By Age</h3>
+            <button onClick={()=>this.sortBy("dob","age")} className='blue-button'>Ascending</button>
+            <button onClick={()=>this.sortBy("-dob","age")} className='blue-button'>Descening</button>
         </div>
         <div className='filter-wrapper'>
           <h3>Filter</h3>
