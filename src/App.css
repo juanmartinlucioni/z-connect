@@ -33,7 +33,7 @@ li {
   color: white;
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 10000;
   height: 100px;
 }
 
@@ -86,7 +86,15 @@ div.add-wrapper input {
 
 div.sort-wrapper div {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-evenly;
+  padding-bottom: 20px;
+  border-bottom: solid white 1px;
+}
+
+div.sort-wrapper div button {
+  width: 35%;
+  margin-bottom: 5px;
 }
 
 div.filter-wrapper form {
@@ -119,7 +127,6 @@ main.wrapper {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  align-items: center;
 }
 
 .card {
@@ -150,21 +157,6 @@ main.wrapper {
 
 .card button#delete-card-button:hover {
   background-color: rgb(163, 30, 30);
-  cursor: pointer;
-}
-
-.card button.view-more-button {
-  height: 25px;
-  width: 100px;
-  background-color: rgb(39, 111, 219);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  transition: 0.2s all ease-in-out;
-}
-
-.card button.view-more-button:hover {
-  background-color: rgb(29, 78, 151);
   cursor: pointer;
 }
 

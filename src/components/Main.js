@@ -10,12 +10,16 @@ class Main extends Component {
       userList: [],
       currentDirection: "row",
       nextDirection: "column",
+      currentAlign: "flex-start",
+      nextAlign: "center",
+      dragDisable: true
     }
   }
   
   sortBy = (property, subprop) => {
     function dynamicSort(property, subprop) {
       var sortOrder = 1;
+      console.log(property[0]);
       if(property[0] === "-") {
           sortOrder = -1;
           property = property.substr(1);
@@ -32,9 +36,12 @@ class Main extends Component {
   }
   changeDirection = () => {
     this.setState({
-      currentDirection : this.state.nextDirection,
-      nextDirection: this.state.currentDirection
-    })
+      currentDirection: this.state.nextDirection,
+      nextDirection: this.state.currentDirection,
+      currentAlign: this.state.nextAlign,
+      nextAlign: this.state.currentAlign,
+      dragDisable: !this.state.dragDisable
+    });
   }
 
   deleteCard = (idToDelete) => {
@@ -103,6 +110,16 @@ class Main extends Component {
     })
   }
 
+  handleOnDragEnd = (result) => {
+    if(!result.destination) return;
+    const userList = this.state.userList
+    const [reorderedList] = userList.splice(result.source.index,1)
+    userList.splice(result.destination.index, 0, reorderedList)
+    this.setState({
+      userList: userList,
+    });
+  }
+
   componentDidMount(){
     fetch("https://randomuser.me/api/?results=20")
       .then((r) => r.json())
@@ -115,83 +132,77 @@ class Main extends Component {
       .catch((e) => console.log(e));
   };
 
-  render(){
-  return (
-    <main className='wrapper'>
-      <div id='filter' style={{ height: this.state.filterHeight }}>
-        <div className='add-wrapper'>
-          <h3>Add More Cards</h3>
-          <form>
-            <input type='number' name='numero' id='numero' min='1' />
-            <button onClick={this.moreCards} className='blue-button'>Add</button>
-          </form>
-        </div>
-        <div className='sort-wrapper add-wrapper'>
-          <h3>Sort By Name</h3>
-          <div>
-            <button onClick={()=>this.sortBy("name","first")} className='blue-button'>A-Z</button>
-            <button onClick={()=>this.sortBy("-name","first")} className='blue-button'>Z-A</button>
+  render() {
+    return (
+      <main className='wrapper'>
+        <div id='filter' style={{ height: this.state.filterHeight }}>
+          <div className='add-wrapper'>
+            <h3>Add More Cards</h3>
+            <form>
+              <input type='number' name='numero' id='numero' min='1' />
+              <button onClick={this.moreCards} className='blue-button'>Add</button>
+            </form>
           </div>
-        </div>
-        <div className='sort-wrapper add-wrapper'>
-          <h3>Sort By Age</h3>
-          <div>
-            <button onClick={()=>this.sortBy("dob","age")} className='blue-button'>Ascending</button>
-            <button onClick={()=>this.sortBy("-dob","age")} className='blue-button'>Descending</button>
-          </div>
-        </div>
-        <div className='sort-wrapper add-wrapper'>
-          <h3>Change Card Direction</h3>
-          <div>
-            <button onClick={this.changeDirection} className='blue-button'>Row / Column</button>
-          </div>
-        </div>
-        <div className='filter-wrapper'>
-          <h3>Filter</h3>
-          <form>
-            <label for='filter-name'>First Name</label>
-            <input type='text' name='filter-name' id='filter-name' />
-            <label for='filter-name'>Last Name</label>
-            <input type='text' name='filter-last' id='filter-last' />
-            <label for='filter-age'>Age</label>
-            <input type='number' name='filter-age' id='filter-age' min='1' />
+          <div className='sort-wrapper'>
+            <h3>Sort By</h3>
             <div>
-              <button onClick={this.filterCards} className='blue-button' type='submit'>Filter</button>
-              <button onClick={this.resetCards} className='blue-button'>Reset Cards</button>
+              <button onClick={()=>this.sortBy("name","first")} className='blue-button'>A-Z</button>
+              <button onClick={()=>this.sortBy("-name","first")} className='blue-button'>Z-A</button>
+              <button onClick={()=>this.sortBy("dob","age")} className='blue-button'>Age Ascending</button>
+              <button onClick={()=>this.sortBy("-dob","age")} className='blue-button'>Age Descending</button>
             </div>
-          </form>
+          </div>
+          <div className='add-wrapper'>
+            <h3>Change Card Direction</h3>
+            <div>
+              <button onClick={this.changeDirection} className='blue-button'>Row / Column</button>
+            </div>
+          </div>
+          <div className='filter-wrapper'>
+            <h3>Filter</h3>
+            <form>
+              <label htmlFor='filter-name'>First Name</label>
+              <input type='text' name='filter-name' id='filter-name' />
+              <label htmlFor='filter-name'>Last Name</label>
+              <input type='text' name='filter-last' id='filter-last' />
+              <label htmlFor='filter-age'>Age</label>
+              <input type='number' name='filter-age' id='filter-age' min='1' />
+              <div>
+                <button onClick={this.filterCards} className='blue-button' type='submit'>Filter</button>
+                <button onClick={this.resetCards} className='blue-button'>Reset Cards</button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
-      <DragDropContext onDragEnd={handleOnDragEnd}> 
-      <Droppable droppableId="cards-wrapper">
-        {(provided) => (
-          <div className='cards-wrapper' style={{flexDirection:this.state.currentDirection}} {...provided.droppableProps} ref={provided.innerRef}>
-            <React.Fragment>
-              {this.state.userList.map((user,index) => {
-                return (
-                <Draggable key={user.login.uuid} draggableId={user.login.uuid} index={index}>
-                  {(provided) => (
-                  <div className="card" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                    <Card 
-                         userInfo={user}
+        <DragDropContext onDragEnd={this.handleOnDragEnd}> 
+        <Droppable droppableId="cards-wrapper">
+          {(provided) => (
+            <div className='cards-wrapper' style={{flexDirection:this.state.currentDirection, alignItems: this.state.currentAlign}} {...provided.droppableProps} ref={provided.innerRef}>
+              <React.Fragment>
+                {this.state.userList.map((user,index) => {
+                  return (
+                  <Draggable key={user.login.uuid} draggableId={user.login.uuid} index={index} isDragDisabled={this.state.dragDisable}>
+                    {(provided) => (
+                    <div className="card" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                      <Card 
+                        userInfo={user}
                         id={user.login.uuid}
                         deleteCard={this.deleteCard}
                         provided={provided}
-                     /> 
-                  </div>
-                
-                  )}
-                </Draggable>
-                );
-              })}
-            </React.Fragment>
-            {provided.placeholder}
-          </div>
-         )}
-      </Droppable>
-      </DragDropContext>
-    </main>
-  );
+                      /> 
+                    </div>
+                    )}
+                  </Draggable>
+                  );
+                })}
+              </React.Fragment>
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+        </DragDropContext>
+      </main>
+    );
   }
 }
 

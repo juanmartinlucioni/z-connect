@@ -22,7 +22,7 @@ class Card extends Component{
 
   render(){ 
   return (
-      <div id={this.props.id} ref={this.props.provided.innerRef} {...this.props.provided.droppableProps} {...this.props.provided.dragHandleProps}>
+      <React.Fragment>
         <button id='delete-card-button' onClick={()=>{this.props.deleteCard(this.props.id)}}>X</button>
         <h3>{this.props.userInfo.name.first + " " +this.props.userInfo.name.last}</h3>
         <img
@@ -39,8 +39,8 @@ class Card extends Component{
           <p>Country: {this.props.userInfo.location.country}</p>
           <p>Register Date: {this.props.userInfo.registered.date.substring(0,10)}</p>
         </div>
-        <button className='view-more-button' id={'view-more-button-' + this.props.id} onClick={()=>{this.viewMore()}}>View {this.state.buttonText}</button>
-      </div>
+        <button className='blue-button' id={'view-more-button-' + this.props.id} onClick={()=>{this.viewMore()}}>View {this.state.buttonText}</button>
+      </React.Fragment>
     );
 }
 }
