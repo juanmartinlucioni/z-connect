@@ -84,6 +84,11 @@ div.add-wrapper input {
   margin: 0 10px;
 }
 
+div.sort-wrapper div {
+  display: flex;
+  justify-content: space-evenly;
+}
+
 div.filter-wrapper form {
   padding-bottom: 25px;
   margin-bottom: 25px;
