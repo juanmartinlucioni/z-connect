@@ -7,6 +7,8 @@ class Main extends Component {
     this.state = {
       originalUserList: [],
       userList: [],
+      currentDirection: "row",
+      nextDirection: "column",
     }
   }
 
@@ -27,7 +29,13 @@ class Main extends Component {
       userList:userList,
     });
   }
-  
+  changeDirection = () => {
+    this.setState({
+      currentDirection : this.state.nextDirection,
+      nextDirection: this.state.currentDirection
+    })
+  }
+
   deleteCard = (idToDelete) => {
     let userList = this.state.userList.filter(
       (user) => user.login.uuid !== idToDelete
@@ -131,6 +139,12 @@ class Main extends Component {
             <button onClick={()=>this.sortBy("-dob","age")} className='blue-button'>Descending</button>
           </div>
         </div>
+        <div className='sort-wrapper add-wrapper'>
+          <h3>Change Card Direction</h3>
+          <div>
+            <button onClick={this.changeDirection} className='blue-button'>Row / Column</button>
+          </div>
+        </div>
         <div className='filter-wrapper'>
           <h3>Filter</h3>
           <form>
@@ -147,7 +161,7 @@ class Main extends Component {
           </form>
         </div>
       </div>
-      <div className='cards-wrapper'>
+      <div className='cards-wrapper' style={{flexDirection:this.state.currentDirection}}>
         <React.Fragment>
           {this.state.userList.map((user) => {
             return (
