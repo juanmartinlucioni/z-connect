@@ -9,6 +9,7 @@ class Main extends Component {
       userList: [],
     }
   }
+
   sortBy = (property, subprop) => {
     function dynamicSort(property, subprop) {
       var sortOrder = 1;
@@ -26,7 +27,6 @@ class Main extends Component {
       userList:userList,
     });
   }
-
   
   deleteCard = (idToDelete) => {
     let userList = this.state.userList.filter(
@@ -66,50 +66,25 @@ class Main extends Component {
     let filterName = document.getElementById("filter-name").value;
     let filterLast = document.getElementById("filter-last").value;
     let filterAge = document.getElementById("filter-age").value;
-
-    if (filterName !== "") {
-      let userListName = this.state.userList.filter((user) => user.name.first.toLowerCase().includes(filterName.toLowerCase()));
+    let filteredCards = this.state.userList.filter((user) => {
+        if (filterAge !== "") {
+          return(
+            user.name.first.toLowerCase().includes(filterName.toLowerCase()) &&
+            user.name.last.toLowerCase().includes(filterLast.toLowerCase()) &&
+            user.dob.age == filterAge
+          )
+        } else {
+          return(
+            user.name.first.toLowerCase().includes(filterName.toLowerCase()) &&
+            user.name.last.toLowerCase().includes(filterLast.toLowerCase())
+          )
+        }
+    });
+    return (
       this.setState({
-        userList: userListName,
-      });
-      if (filterLast !== "") {
-        let userListLast = userListName.filter((user) => user.name.last.toLowerCase().includes(filterLast.toLowerCase()));
-        this.setState({
-          userList: userListLast
-        })
-        if (filterAge !== "") {
-          let userListAge = userListLast.filter((user) => user.dob.age == filterAge);
-          this.setState({
-            userList: userListAge,
-          });
-        }
-      } else {
-        if (filterAge !== "") {
-          let userListAge = userListName.filter((user) => user.dob.age == filterAge);
-          this.setState({
-            userList: userListAge,
-          });
-        }
-      }
-    } else  if (filterLast !== ""){
-      let userListLast = this.state.userList.filter((user) => user.name.last.toLowerCase().includes(filterLast.toLowerCase()));
-        this.setState({
-          userList: userListLast
-        })
-        if (filterAge !== "") {
-          let userListAge = userListLast.filter((user) => user.dob.age == filterAge);
-          this.setState({
-            userList: userListAge,
-          });
-        }
-      } else {
-        if (filterAge !== "") {
-          let userListAge = this.state.userList.filter((user) => user.dob.age == filterAge);
-          this.setState({
-            userList: userListAge,
-          });
-    }
-  }
+        userList: filteredCards
+      })
+    );
 }
 
   resetCards = (event) => {
@@ -142,15 +117,19 @@ class Main extends Component {
             <button onClick={this.moreCards} className='blue-button'>Add</button>
           </form>
         </div>
-        <div className='add-wrapper'>
+        <div className='sort-wrapper add-wrapper'>
           <h3>Sort By Name</h3>
+          <div>
             <button onClick={()=>this.sortBy("name","first")} className='blue-button'>A-Z</button>
             <button onClick={()=>this.sortBy("-name","first")} className='blue-button'>Z-A</button>
+          </div>
         </div>
-        <div className='add-wrapper'>
+        <div className='sort-wrapper add-wrapper'>
           <h3>Sort By Age</h3>
+          <div>
             <button onClick={()=>this.sortBy("dob","age")} className='blue-button'>Ascending</button>
-            <button onClick={()=>this.sortBy("-dob","age")} className='blue-button'>Descening</button>
+            <button onClick={()=>this.sortBy("-dob","age")} className='blue-button'>Descending</button>
+          </div>
         </div>
         <div className='filter-wrapper'>
           <h3>Filter</h3>
