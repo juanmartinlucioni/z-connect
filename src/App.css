@@ -64,15 +64,11 @@ div#filter {
   padding: 1em;
   background-color: black;
   transition: 0.2s all ease-in-out;
-  /* top: -50%;
-  width: 100%;
-  height: auto; */
 }
 
 div#filter.show {
   right: 0;
   width: 25%;
-  /* top: 85px; */
 }
 
 div.add-wrapper {

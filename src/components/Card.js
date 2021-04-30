@@ -28,7 +28,7 @@ class Card extends Component{
         <img
           className='user-image'
           src= {this.props.userInfo.picture.medium}
-          alt='Sample User'
+          alt={this.props.userInfo.name.first + " " +this.props.userInfo.name.last}
         />
         <p>Email: {this.props.userInfo.email}</p>
         <p>Birthday: {this.props.userInfo.dob.date.substring(0,10)} (Age: {this.props.userInfo.dob.age})</p>

@@ -19,7 +19,6 @@ class Main extends Component {
   sortBy = (property, subprop) => {
     function dynamicSort(property, subprop) {
       var sortOrder = 1;
-      console.log(property[0]);
       if(property[0] === "-") {
           sortOrder = -1;
           property = property.substr(1);
@@ -34,6 +33,7 @@ class Main extends Component {
       userList:userList,
     });
   }
+
   changeDirection = () => {
     this.setState({
       currentDirection: this.state.nextDirection,
@@ -68,7 +68,6 @@ class Main extends Component {
           const user = resultado.results[i];
           userListParse.push(user);
         }
-        console.log(userListParse);
         this.setState({
           userList: userListParse,
           originalUserList: userListParse
@@ -101,7 +100,7 @@ class Main extends Component {
         userList: filteredCards
       })
     );
-}
+  }
 
   resetCards = (event) => {
     event.preventDefault();
@@ -135,7 +134,7 @@ class Main extends Component {
   render() {
     return (
       <main className='wrapper'>
-        <div id='filter' style={{ height: this.state.filterHeight }}>
+        <div id='filter'>
           <div className='add-wrapper'>
             <h3>Add More Cards</h3>
             <form>
@@ -188,7 +187,6 @@ class Main extends Component {
                         userInfo={user}
                         id={user.login.uuid}
                         deleteCard={this.deleteCard}
-                        provided={provided}
                       /> 
                     </div>
                     )}
